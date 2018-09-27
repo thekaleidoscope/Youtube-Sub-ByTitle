@@ -1,39 +1,14 @@
-var http = require("http");
+const request = require("request");
+const cheerio = require("cheerio");
 
 let path = process.argv[2].split(" ").join("+");
 // console.log(path);
-var options = "https://www.youtube.com/results?search_query=" + path;
-const getScript = url => {
-  return new Promise((resolve, reject) => {
-    const http = require("http"),
-      https = require("https");
+var link = "https://www.youtube.com/results?search_query=" + path;
 
-    let client = http;
-
-    if (url.toString().indexOf("https") === 0) {
-      client = https;
-    }
-
-    client
-      .get(url, resp => {
-        let data = "";
-
-        // A chunk of data has been recieved.
-        resp.on("data", chunk => {
-          data += chunk;
-        });
-
-        // The whole response has been received. Print out the result.
-        resp.on("end", () => {
-          resolve(data);
-        });
-      })
-      .on("error", err => {
-        reject(err);
-      });
-  });
-};
-
-(async url => {
-  console.log(await getScript(url));
-})(options);
+request.get(link, function(error, response, html) {
+  // Use cheerio to parse and create the jQuery-like DOM based on the retrieved html string
+  let $ = cheerio.load(html);
+  console.log(
+    "WHAT .." + $("a.yt-simple-endpoint style-scope ytd-video-renderer")
+  );
+});
