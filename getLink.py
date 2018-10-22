@@ -1,7 +1,8 @@
-from bs4 import BeautifulSoup as bs
-import requests
 import sys
 
+import requests
+
+from bs4 import BeautifulSoup as bs
 
 def link(link):
 
